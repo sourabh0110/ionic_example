@@ -28,22 +28,29 @@ export class HomePage {
     message: "Enter a name for this new song you're so keen on adding",
     inputs: [
       {
-        name: 'title',
-        placeholder: 'Title'
+        name: 'bandName',
+        placeholder: 'Band Name'
+      },
+      {
+        name: 'songName',
+        placeholder: 'Song Name'
       },
     ],
     buttons: [
       {
         text: 'Cancel',
+        role:'cancel',
         handler: data => {
           console.log('Cancel clicked');
         }
       },
       {
         text: 'Save',
+        role:'save',
         handler: data => {
           this.songs.push({          
-              title: data.title
+              bandName: data.bandName,
+              songName: data.songName
           });
         }
       }
@@ -51,7 +58,7 @@ export class HomePage {
   });
   prompt.present();
 }
-    showOptions(songId, songTitle) {
+    showOptions(songId, songName) {
   let actionSheet = this.actionSheetCtrl.create({
     title: 'What do you want to do?',
     buttons: [
@@ -64,7 +71,7 @@ export class HomePage {
       },{
         text: 'Update title',
         handler: () => {
-          this.updateSong(songId, songTitle);
+          this.updateSong(songId ,songName);
         }
       },{
         text: 'Cancel',
@@ -83,15 +90,20 @@ removeSong(songId)
   this.songs.remove(songId);
 }
 
-updateSong(songId, songTitle){
+updateSong(songId,songName){
   let prompt = this.alertCtrl.create({
     title: 'Song Name',
     message: "Update the name for this song",
     inputs: [
       {
-        name: 'title',
-        placeholder: 'Title',
-        value: songTitle
+        name: 'bandName',
+        placeholder: 'Band Name',
+        value: 'bandName'
+      },
+      {
+        name: 'songName',
+        placeholder: 'Song Name',
+        value: 'songName'    
       },
     ],
     buttons: [
@@ -105,7 +117,8 @@ updateSong(songId, songTitle){
         text: 'Save',
         handler: data => {
           this.songs.update(songId, {
-            title: data.title
+            bandName: data.bandName,
+            songName: data.songName
           });
         }
       }
