@@ -8,6 +8,12 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import {Product} from '../pages/product/product.component';
 import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+
+
+
+
+
 /*
 
 <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
@@ -43,7 +49,8 @@ export const firebaseConfig = {
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    AngularFireModule.initializeApp(firebaseConfig)
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
