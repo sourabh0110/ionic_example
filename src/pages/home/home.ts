@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {Product} from '../product/product.component';
 
+  
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -9,7 +10,6 @@ import {Product} from '../product/product.component';
 export class HomePage {
 
   constructor(public navCtrl: NavController) {
-
   }
    newPage()
    {
