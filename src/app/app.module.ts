@@ -5,12 +5,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { NavController } from 'ionic-angular';
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+import { HomePage } from '../pages/home/home.component';
 import {Product} from '../pages/product/product.component';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
-
-
+import {LoginPage} from '../pages/login/login.component';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 
 
@@ -44,19 +44,21 @@ export const firebaseConfig = {
   declarations: [
     MyApp,
     HomePage,
-    Product
+    Product,
+    LoginPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-   Product
+   Product,
+   LoginPage
   ],
   providers: [
     StatusBar,

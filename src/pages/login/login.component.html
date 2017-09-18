@@ -1,0 +1,16 @@
+<ion-header style="background:white">
+  <!--
+  <ion-navbar>
+    <ion-title text-center>
+      Ionic Blank
+    </ion-title>
+  </ion-navbar>
+  -->
+  <h1>Login Form</h1>
+</ion-header>
+
+<ion-content>
+     <ion-input type="text" name="email" [(ngModel)]="email" placeholder="email"></ion-input>
+ <ion-input type="password" name="password" [(ngModel)]="password" placeholder="password"></ion-input>
+ <button ion-button round block (click)="login()">Login</button>
+</ion-content>

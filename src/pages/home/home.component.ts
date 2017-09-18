@@ -2,15 +2,23 @@ import { Component } from '@angular/core';
 import { NavController,AlertController,ActionSheetController } from 'ionic-angular';
 import {Product} from '../product/product.component';
 import { FirebaseListObservable,AngularFireDatabase } from 'angularfire2/database';  
-
+import {LoginPage} from '../login/login.component'
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
+
+
   songs: FirebaseListObservable<any>;
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController,db:AngularFireDatabase, public actionSheetCtrl: ActionSheetController) {
+  constructor(public navCtrl: NavController,public alertCtrl: AlertController,db:AngularFireDatabase, public actionSheetCtrl: ActionSheetController)
+   {
+    if(!this.isLoggedin())
+      {
+      console.log('You are not logged in');
+      this.navCtrl.push(LoginPage);
+    }
     this.songs = db.list('/songs');
 
   }
@@ -22,6 +30,9 @@ export class HomePage {
      //this.navCtrl.setRoot(Product);
    }
     */
+   
+
+
     addSong(){
   let prompt = this.alertCtrl.create({
     title: 'Song Name',
@@ -58,6 +69,12 @@ export class HomePage {
   });
   prompt.present();
 }
+isLoggedin()
+   {
+      if (window.localStorage.getItem('currentuser')) {
+      return true;
+    }
+   }
     showOptions(songId, songName) {
   let actionSheet = this.actionSheetCtrl.create({
     title: 'What do you want to do?',
