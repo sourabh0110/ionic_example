@@ -22,7 +22,7 @@ export class LoginPage
     login()
     {
         
-
+            
 
         this.angfire.auth.signInWithEmailAndPassword(this.email,this.password).then((response) => {
         console.log('Login success' + JSON.stringify(response));
@@ -32,6 +32,7 @@ export class LoginPage
           //picture: response.auth.photoURL
         };
         window.localStorage.setItem('currentuser', JSON.stringify(currentuser));
+        console.log(currentuser);
         this.navCtrl.pop();
         //this.navCtrl.push(HomePage);
       }).catch((error) => {
