@@ -16,14 +16,17 @@ export class HomePage {
 
 
   songs: FirebaseListObservable<any>;
+  images:FirebaseListObservable<any>;
   constructor(public camera:Camera ,public navCtrl: NavController,public alertCtrl: AlertController,db:AngularFireDatabase, public actionSheetCtrl: ActionSheetController)
    {
     if(!this.isLoggedin())
       {
       console.log('You are not logged in');
       this.navCtrl.push(LoginPage);
+      this.navCtrl.pop();
     }
     this.songs = db.list('/songs');
+    this.images=db.list('/images');
 
   }
   /* addSong()
@@ -56,11 +59,13 @@ this.camera.getPicture(options).then((imageData) => {
 });
     }
 
-uploadtoDB()
+uploadtoDB(base64Image)
 {
+  
   let storageRef=firebase.storage().ref();
+  const orgImage=base64Image;
   const fileName=Math.floor(Date.now()/1000);
-  const imageRef=storageRef.child('/images/${fileName}.jpg');
+  const imageRef=storageRef.child('/images/${fileName}-${orgImage}.jpg');
   imageRef.putString(this.base64Image,firebase.storage.StringFormat.DATA_URL).then((snapshot)=>{
   console.log("Success");
   },(err)=>

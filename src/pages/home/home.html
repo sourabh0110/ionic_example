@@ -29,7 +29,10 @@
 
   
     <button ion-button full icon-only (click)="captureImage()">
-      <ion-icon name="camera"></ion-icon>
+      <ion-icon name="md-camera"></ion-icon>
     </button>
   <img [src]="base64Image" *ngIf="base64Image" />
+  <button ion-button full icon-only (click)="uploadtoDB(base64Image)">
+      <ion-icon name="md-cloud-upload"></ion-icon>
+    </button>
 </ion-content>
