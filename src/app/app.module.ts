@@ -11,8 +11,8 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import {LoginPage} from '../pages/login/login.component';
 import { AngularFireAuthModule } from 'angularfire2/auth';
-
-
+import { Camera } from '@ionic-native/camera';
+import { Device } from '@ionic-native/device';
 
 /*
 
@@ -36,7 +36,7 @@ export const firebaseConfig = {
   apiKey: "AIzaSyAoSSkvWt2aj511dRVW1onYc8v-axItQ_0",
   authDomain: "my-app-ionic-c238f.firebaseapp.com",
   databaseURL: "https://my-app-ionic-c238f.firebaseio.com",
-  storageBucket: "",
+  storageBucket: "gs://my-app-ionic-c238f.appspot.com",
   messagingSenderId: "363972019128"
 };
 
@@ -63,6 +63,7 @@ export const firebaseConfig = {
   providers: [
     StatusBar,
     SplashScreen,
+    Camera,Device,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

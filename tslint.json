@@ -5,7 +5,12 @@
       true
     ]
   },
+  "extends":
+  {
+    "extends": ["tslint:recommended", "tslint-sonarts"]
+  },
   "rulesDirectory": [
     "node_modules/tslint-eslint-rules/dist/rules"
   ]
+  
 }

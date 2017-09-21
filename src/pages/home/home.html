@@ -16,10 +16,20 @@
 <ion-content>
 
   <ion-list>
-  <ion-item *ngFor="let song of songs | async" (click)="showOptions(song.$key, song.songName)">
-   {{song.songName}}|
+  <ion-item-sliding *ngFor="let song of songs | async" (click)="showOptions(song.$key, song.songName, song.bandName)">
+  <ion-item>
+    {{song.songName}}|
    {{song.bandName}}
   </ion-item>
+  <ion-item-options side="right">
+        <button ion-button color="danger" icon-only (click)="removeSong(song.$key)"><ion-icon name="trash"></ion-icon></button>
+      </ion-item-options>
+  </ion-item-sliding>
 </ion-list>
 
+  
+    <button ion-button full icon-only (click)="captureImage()">
+      <ion-icon name="camera"></ion-icon>
+    </button>
+  <img [src]="base64Image" *ngIf="base64Image" />
 </ion-content>

@@ -2,7 +2,11 @@ import { Component } from '@angular/core';
 import { NavController,AlertController,ActionSheetController } from 'ionic-angular';
 import {Product} from '../product/product.component';
 import { FirebaseListObservable,AngularFireDatabase } from 'angularfire2/database';  
+
 import {LoginPage} from '../login/login.component'
+import { Camera, CameraOptions } from '@ionic-native/camera';
+
+import firebase from 'firebase'; 
 
 @Component({
   selector: 'page-home',
@@ -12,7 +16,7 @@ export class HomePage {
 
 
   songs: FirebaseListObservable<any>;
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController,db:AngularFireDatabase, public actionSheetCtrl: ActionSheetController)
+  constructor(public camera:Camera ,public navCtrl: NavController,public alertCtrl: AlertController,db:AngularFireDatabase, public actionSheetCtrl: ActionSheetController)
    {
     if(!this.isLoggedin())
       {
@@ -31,7 +35,66 @@ export class HomePage {
    }
     */
    
+base64Image:any;
+    captureImage()
+    {
+  const options: CameraOptions =
+  {
+  quality: 100,
+  destinationType: this.camera.DestinationType.DATA_URL,
+  encodingType: this.camera.EncodingType.JPEG,
+  mediaType: this.camera.MediaType.PICTURE
+}
 
+this.camera.getPicture(options).then((imageData) => {
+ // imageData is either a base64 encoded string or a file URI
+ // If it's base64:
+  this.base64Image = 'data:image/jpeg;base64,' + imageData;
+ 
+}, (err) => {
+ // Handle error
+});
+    }
+
+uploadtoDB()
+{
+  let storageRef=firebase.storage().ref();
+  const fileName=Math.floor(Date.now()/1000);
+  const imageRef=storageRef.child('/images/${fileName}.jpg');
+  imageRef.putString(this.base64Image,firebase.storage.StringFormat.DATA_URL).then((snapshot)=>{
+  console.log("Success");
+  },(err)=>
+{
+    console.log("Error")
+}
+)
+    
+}
+
+downloadImg()
+{
+  let storage=firebase.storage();
+  let storageRef=storage.ref('images/stars.jpg');
+  var gsRef=storage.refFromURL('gs://my-app-ionic-c238f.appspot.com/images');
+  var httpsRef=storage.refFromURL('https://firebasestorage.googleapis.com/b/bucket/o/images%20stars.jpg')
+
+  var url:any = 'https://firebasestorage.googleapis.com/v0/b/my-app-ionic-c238f.appspot.com/o/images%2Fstars.jpg?alt=media&token=3d302cf6-9eba-4a02-94e4-98bb1ddec564'
+  storageRef.child('images/stars.jpg').getDownloadURL().then(function(url)
+{
+    var xhr = new XMLHttpRequest();
+  xhr.responseType = 'blob';
+  xhr.onload = function(event) {
+    var blob = xhr.response;
+  };
+  xhr.open('GET', url);
+  xhr.send();
+
+  
+  
+
+})
+
+}
 
     addSong(){
   let prompt = this.alertCtrl.create({
@@ -75,20 +138,14 @@ isLoggedin()
       return true;
     }
    }
-    showOptions(songId, songName) {
+    showOptions(songId, songName,bandName) {
   let actionSheet = this.actionSheetCtrl.create({
     title: 'What do you want to do?',
     buttons: [
       {
-        text: 'Delete Song',
-        role: 'destructive',
-        handler: () => {
-          this.removeSong(songId);
-        }
-      },{
         text: 'Update title',
         handler: () => {
-          this.updateSong(songId ,songName);
+          this.updateSong(songId ,songName,bandName);
         }
       },{
         text: 'Cancel',
@@ -107,20 +164,18 @@ removeSong(songId)
   this.songs.remove(songId);
 }
 
-updateSong(songId,songName){
+updateSong(songId,songName,bandName){
   let prompt = this.alertCtrl.create({
     title: 'Song Name',
     message: "Update the name for this song",
     inputs: [
       {
         name: 'bandName',
-        placeholder: 'Band Name',
-        value: 'bandName'
+        value: bandName
       },
       {
         name: 'songName',
-        placeholder: 'Song Name',
-        value: 'songName'    
+        value: songName  
       },
     ],
     buttons: [
