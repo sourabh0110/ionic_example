@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController,AlertController,ActionSheetController } from 'ionic-angular';
+import { NavController,AlertController,ActionSheetController,LoadingController } from 'ionic-angular';
 import {Product} from '../product/product.component';
 import { FirebaseListObservable,AngularFireDatabase } from 'angularfire2/database';  
 
@@ -17,7 +17,13 @@ export class HomePage {
 
   songs: FirebaseListObservable<any>;
   images:FirebaseListObservable<any>;
-  constructor(public camera:Camera ,public navCtrl: NavController,public alertCtrl: AlertController,db:AngularFireDatabase, public actionSheetCtrl: ActionSheetController)
+  constructor(public camera:Camera ,
+    public navCtrl: NavController,
+    public alertCtrl: AlertController,
+    public db:AngularFireDatabase, 
+    public actionSheetCtrl: ActionSheetController,
+    public loadCtrl:LoadingController
+  )
    {
     if(!this.isLoggedin())
       {
@@ -46,10 +52,14 @@ base64Image:any;
   quality: 100,
   destinationType: this.camera.DestinationType.DATA_URL,
   encodingType: this.camera.EncodingType.JPEG,
-  mediaType: this.camera.MediaType.PICTURE
+  mediaType: this.camera.MediaType.PICTURE,
+  saveToPhotoAlbum:true,
+  allowEdit:true,
+  correctOrientation:true,
+    
 }
 
-this.camera.getPicture(options).then((imageData) => {
+const image=this.camera.getPicture(options).then((imageData) => {
  // imageData is either a base64 encoded string or a file URI
  // If it's base64:
   this.base64Image = 'data:image/jpeg;base64,' + imageData;
@@ -59,18 +69,25 @@ this.camera.getPicture(options).then((imageData) => {
 });
     }
 
-uploadtoDB(base64Image)
+uploadtoDB(image)
 {
   
   let storageRef=firebase.storage().ref();
-  const orgImage=base64Image;
+  const orgImage=image;
   const fileName=Math.floor(Date.now()/1000);
-  const imageRef=storageRef.child('/images/${fileName}-${orgImage}.jpg');
+  const imageRef=storageRef.child('/images/'+fileName+orgImage+'.jpg');
   imageRef.putString(this.base64Image,firebase.storage.StringFormat.DATA_URL).then((snapshot)=>{
   console.log("Success");
+  alert("Success");
+    
+  this.images.push({
+    image:image
+  })
   },(err)=>
 {
-    console.log("Error")
+    
+    console.log("Image Error")
+    alert("Upload Error")
 }
 )
     

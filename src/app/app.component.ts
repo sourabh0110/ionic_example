@@ -5,7 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import {Device} from '@ionic-native/device';
 import { HomePage } from '../pages/home/home.component';
 import { FirebaseListObservable,AngularFireDatabase } from 'angularfire2/database';  
-import { LoadingController } from 'ionic-angular';
+import { LoadingController,AlertController } from 'ionic-angular';
 import firebase from 'firebase';
 @Component({
   templateUrl: 'app.html'
@@ -16,11 +16,13 @@ export class MyApp {
   users: FirebaseListObservable<any>;
   constructor(
     private device:Device ,
-    platform: Platform, 
-    statusBar: StatusBar, 
+    private platform: Platform, 
+    private statusBar: StatusBar, 
     private splashScreen: SplashScreen,
-    db:AngularFireDatabase,
-    private loadingCtrl:LoadingController)
+    private db:AngularFireDatabase,
+    private loadingCtrl:LoadingController,
+    private alertCtrl:AlertController
+  )
      {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -53,11 +55,13 @@ export class MyApp {
       <div class="custom-spinner-container">
         <div class="custom-spinner-box"></div>
       </div>`,
-    duration: 5000
+    duration: 5000,
+    
   });
 
   loading.onDidDismiss(() => {
     console.log('Dismissed loading');
+    
   }
 );
   loading.present();
@@ -75,11 +79,21 @@ export class MyApp {
       usersRef.child('users').orderByChild('uuid').equalTo(uUID).once('value',snapshot => {
         const userData = snapshot.val();
         if (userData){
+          
+          let alert=this.alertCtrl.create({
+              title:'Welcome + {$uuid}'
+            })
          console.log("exists!");
-         console.log(userData)
+         console.log("User Data is: "+userData);
         }
         else
           {
+            let alert=this.alertCtrl.create({
+              title:'New User!',
+              buttons:['Dismiss']
+              
+            })
+            alert.present();
             console.log("No Users Found,adding this user!");
             this.users.push({          
               uuid: uUID,
