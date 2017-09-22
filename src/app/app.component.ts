@@ -14,7 +14,13 @@ export class MyApp {
   
   rootPage: any = HomePage;
   users: FirebaseListObservable<any>;
-  constructor(private device:Device ,platform: Platform, statusBar: StatusBar, private splashScreen: SplashScreen,db:AngularFireDatabase,private loadingCtrl:LoadingController) {
+  constructor(
+    private device:Device ,
+    platform: Platform, 
+    statusBar: StatusBar, 
+    private splashScreen: SplashScreen,
+    db:AngularFireDatabase,
+    private loadingCtrl:LoadingController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
