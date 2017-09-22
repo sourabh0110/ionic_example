@@ -20,32 +20,34 @@ export class MyApp {
     statusBar: StatusBar, 
     private splashScreen: SplashScreen,
     db:AngularFireDatabase,
-    private loadingCtrl:LoadingController) {
+    private loadingCtrl:LoadingController)
+     {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
-      //this.splashScreen.show();
+      //this.splashScreen.hide();
       // let status bar overlay webview
       statusBar.overlaysWebView(true);
       // set status bar to white
       statusBar.backgroundColorByHexString('#ffffff');
-      
       //Device Info:
       if(!this.device.uuid==null)
       console.log("UUID: "+ this.device.uuid);
-      //Send Device ID to FB db table
+      //Send Device ID to FB db table by creating /users
       this.users = db.list('/users');  
       var uUID=this.device.uuid;
-      var getUID=firebase.database().ref().child('users').orderByChild('uuid')
-      //https://my-app-ionic-c238f.firebaseio.com/users/-KuUG9rdsLqRIr8w7lfO
-        //alert(getUID);
-    });
-      this.presentLoadingCustom();
-    this.checkUID();
-    //this.getUsers();
+    },
+    err=>
+    {
+        console.log("Onload Issues");
+    } 
+  );
+    this.presentLoadingCustom();
+    this.getUsers();
   }
   presentLoadingCustom() {
+    console.clear();
   let loading = this.loadingCtrl.create({
     content: `
       <div class="custom-spinner-container">
@@ -56,38 +58,45 @@ export class MyApp {
 
   loading.onDidDismiss(() => {
     console.log('Dismissed loading');
-  });
-
+  }
+);
   loading.present();
 }
-   checkUID()
-      {
-        
-       /*
-        
-      console.log("User Id: "+getUID);
-      
-        getUID.once('value',function(snapshot){
-          if(!snapshot.hasChild(uUID) )
-            {
-              alert('Exists')
-            }
-            else
-              {
-                this.users.push({          
+      getUsers(){
+      const uUID=this.device.uuid;
+      const model=this.device.model;
+      const pf=this.device.platform;
+      const ver=this.device.version;
+      const usersRef=firebase.database().ref();
+    
+      if(!this.users==null)
+      {console.log("Users"+this.users)}
+
+      usersRef.child('users').orderByChild('uuid').equalTo(uUID).once('value',snapshot => {
+        const userData = snapshot.val();
+        if (userData){
+         console.log("exists!");
+         console.log(userData)
+        }
+        else
+          {
+            console.log("No Users Found,adding this user!");
+            this.users.push({          
               uuid: uUID,
               model:model,
               platform:pf,
               version:ver
           });
-              }
-        });*/
-      } 
-  
+          }
+});
 
-      getUsers(){
-          console.log("Users"+this.users)
-          var usersRef=firebase.database().ref();
+
+
+
+/*
+
+
+          
           usersRef.child('users').once(this.device.uuid,function(snapshot){
             var exists=(snapshot.val()!==null);
             if(exists)
@@ -107,7 +116,7 @@ export class MyApp {
           });
               }
           })
-
+*/
   }
 
    
