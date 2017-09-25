@@ -13,6 +13,7 @@ import {LoginPage} from '../pages/login/login.component';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { Camera } from '@ionic-native/camera';
 import { Device } from '@ionic-native/device';
+import { FirebaseAnalytics } from '@ionic-native/firebase-analytics';
 
 /*
 
@@ -63,7 +64,7 @@ export const firebaseConfig = {
   providers: [
     StatusBar,
     SplashScreen,
-    Camera,Device,
+    Camera,Device,FirebaseAnalytics,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

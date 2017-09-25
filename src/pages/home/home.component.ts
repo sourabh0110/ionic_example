@@ -5,9 +5,9 @@ import { FirebaseListObservable,AngularFireDatabase } from 'angularfire2/databas
 
 import {LoginPage} from '../login/login.component'
 import { Camera, CameraOptions } from '@ionic-native/camera';
-
-import firebase from 'firebase'; 
-
+import { FirebaseAnalytics } from '@ionic-native/firebase-analytics';
+import firebase from 'firebase';   
+   
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -22,14 +22,25 @@ export class HomePage {
     public alertCtrl: AlertController,
     public db:AngularFireDatabase, 
     public actionSheetCtrl: ActionSheetController,
-    public loadCtrl:LoadingController
+    public loadCtrl:LoadingController,
+    private firebaseAnalytics: FirebaseAnalytics
   )
    {
+
+    this.firebaseAnalytics.logEvent('home_page',{page:'HomePage'})
+    .then(
+      (res:any) => console.log(res)
+    )
+    .catch(
+      (err:any)=>console.log(err)
+    )
+
     if(!this.isLoggedin())
       {
       console.log('You are not logged in');
       this.navCtrl.push(LoginPage);
       this.navCtrl.pop();
+    
     }
     this.songs = db.list('/songs');
     this.images=db.list('/images');
