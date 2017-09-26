@@ -5,8 +5,7 @@ import { FirebaseListObservable,AngularFireDatabase } from 'angularfire2/databas
 
 import {LoginPage} from '../login/login.component'
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { FirebaseAnalytics } from '@ionic-native/firebase-analytics';
-import firebase from 'firebase';   
+import * as services from '../../app/services/app.service';   
    
 @Component({
   selector: 'page-home',
@@ -23,17 +22,11 @@ export class HomePage {
     public db:AngularFireDatabase, 
     public actionSheetCtrl: ActionSheetController,
     public loadCtrl:LoadingController,
-    private firebaseAnalytics: FirebaseAnalytics
+    private firebaseAnalytics: services.FirebaseAppService
   )
    {
 
-    this.firebaseAnalytics.logEvent('home_page',{page:'HomePage'})
-    .then(
-      (res:any) => console.log(res)
-    )
-    .catch(
-      (err:any)=>console.log(err)
-    )
+    
 
     if(!this.isLoggedin())
       {
@@ -73,7 +66,7 @@ base64Image:any;
 const image=this.camera.getPicture(options).then((imageData) => {
  // imageData is either a base64 encoded string or a file URI
  // If it's base64:
-  this.base64Image = 'data:image/jpeg;base64,' + imageData;
+ // this.base64Image = 'data:image/jpeg;base64,' + imageData;
  
 }, (err) => {
  // Handle error
