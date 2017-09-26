@@ -14,7 +14,8 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { Camera } from '@ionic-native/camera';
 import { Device } from '@ionic-native/device';
 import { FirebaseAnalytics } from '@ionic-native/firebase-analytics';
-import * as fbservices from '../app/services/app.service';  
+import {AppService} from '../app/services/app.loader.service';
+import {FirebaseServices} from '../app/services/app.firebase.service';
 import { Firebase } from '@ionic-native/firebase';
 /*
 
@@ -65,7 +66,7 @@ export const firebaseConfig = {
   providers: [
     StatusBar,
     SplashScreen,
-    Camera,Device,FirebaseAnalytics,Firebase,
+    Camera,Device,FirebaseAnalytics,Firebase,AppService,FirebaseServices,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
