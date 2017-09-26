@@ -61,7 +61,7 @@ export class MyApp {
 
   loading.onDidDismiss(() => {
     console.log('Dismissed loading');
-    
+    //console.clear();  
   }
 );
   loading.present();

@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'; 
 import { NavController,AlertController,ActionSheetController,LoadingController } from 'ionic-angular';
 import {Product} from '../product/product.component';
 import { FirebaseListObservable,AngularFireDatabase } from 'angularfire2/database';  
-
+import { Firebase } from '@ionic-native/firebase';
 import {LoginPage} from '../login/login.component'
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import * as services from '../../app/services/app.service';   
-   
+import { Camera, CameraOptions } from '@ionic-native/camera'; 
+//import {FirebaseAppService} from '../../app/services/app.service';   
+import { FirebaseAnalytics } from '@ionic-native/firebase-analytics';
+import firebase from 'firebase';   
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
+  //providers:[FirebaseAppService]
 })
 export class HomePage {
 
@@ -17,16 +19,29 @@ export class HomePage {
   songs: FirebaseListObservable<any>;
   images:FirebaseListObservable<any>;
   constructor(public camera:Camera ,
-    public navCtrl: NavController,
-    public alertCtrl: AlertController,
-    public db:AngularFireDatabase, 
-    public actionSheetCtrl: ActionSheetController,
-    public loadCtrl:LoadingController,
-    private firebaseAnalytics: services.FirebaseAppService
+    private navCtrl: NavController,
+    private alertCtrl: AlertController,
+    private db:AngularFireDatabase, 
+    private actionSheetCtrl: ActionSheetController,
+    private loadCtrl:LoadingController,
+    private firebaseAnalytics:FirebaseAnalytics,
+    //private fbAnalytics: FirebaseAppService
+    private nativeFirebase:Firebase
   )
    {
+     //FCM
+    this.nativeFirebase.getToken()
+    .then(token => console.log(`The token is ${token}`))
+    .catch(err => console.log(err));
 
-    
+    //Firebase Analytics
+    this.firebaseAnalytics.logEvent('home_page',{page:'HomePage'})
+    .then(
+      (res:any) => console.log(res)
+    )
+    .catch(
+      (err:any)=>console.log(err)
+    )
 
     if(!this.isLoggedin())
       {

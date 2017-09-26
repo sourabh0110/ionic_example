@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import { FirebaseAnalytics } from '@ionic-native/firebase-analytics';
 import firebase from 'firebase'; 
 @Injectable()
-
+  
 export class FirebaseAppService
 {
     firebaseAnalytics:any;
-    constructor(FirebaseAnalytics:FirebaseAnalytics)
+    constructor(firebaseAnalytics:FirebaseAnalytics)
     {
         this.firebaseAnalytics.logEvent('home_page',{page:'HomePage'})
     .then(
